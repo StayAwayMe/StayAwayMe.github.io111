@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var arr =[
+var axios = require('axios')
+var arr = [
   {
     "query": "中国女排横扫韩国女排",
     "display_query": "中国女排横扫韩国女排",
@@ -52,12 +53,29 @@ var arr =[
     "uuid": "6d63870c-2880-4223-ba7a-c4ee90c5e31c"
   }
 ]
+
+
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
-router.get('/api/data', function(req, res, next) {
+router.get('/api/data', function (req, res, next) {
   // res.render('index', { title:JSON.stringify(arr) });
   res.send(JSON.stringify(arr))
 });
+router.get('/api/zhihu', function (req, res, next) {
+  // res.render('index', { title:JSON.stringify(arr) });
+  axios.get("https://www.zhihu.com/api/v4/search/preset_words").then((res2) => {
+    res.send(JSON.stringify(res2.data.preset_words.words))
+  })
+});
+router.get('/api/gitselect', function (req, res, next) {
+  const {name} = req.query
+  const str =encodeURI('name');
+  axios.get(`https://api.github.com/users/${str}`).then((res2) => {
+    res.send(JSON.stringify(res2.data))
+  })
+
+});
+
 module.exports = router;
