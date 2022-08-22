@@ -9,7 +9,6 @@ const defaultState = {
 
 }
 export default (state = defaultState, action) => {
-    console.log(state,'state');
     // reducer只能接收state 不能改变state
     if (action.type === "changeWilldoList") {
         let newstate = JSON.parse(JSON.stringify(state));

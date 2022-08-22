@@ -1,27 +1,34 @@
-import React, { Component } from "react";
-import TODOLIST from "./view/todolist/App.jsx";
-// import {KFButton} from 'kf-component/dist/bundle.js'
-const logo = new URL("./images/login.png", import.meta.url);
-const styleClass = {
-	fff:{
-		color:'red'
-	}
+import React,{useReducer} from 'react'
+
+function init(initialCount) {
+  return {count: initialCount};
 }
-export default class App extends Component {
-	constructor(props) {
-	  super(props)
-	
-	}
-  render() {
-    return (
-      <>
-        <div>react without create-react-app</div>
-				<TODOLIST></TODOLIST>
 
-
-      </>
-    );
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    case 'reset':
+      return init(action.payload);
+    default:
+      throw new Error();
   }
 }
 
-
+function Counter({initialCount}) {
+  const [state, dispatch] = useReducer(reducer, initialCount, init);
+  return (
+    <>
+      Count: {state.count}
+      <button
+        onClick={() => dispatch({type: 'reset', payload: initialCount})}>
+        Reset
+      </button>
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+    </>
+  );
+}
+export default Counter
