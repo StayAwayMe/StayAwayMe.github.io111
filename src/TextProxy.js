@@ -1,6 +1,10 @@
 import React from 'react'
 import axios from 'axios'
-
+import { message ,Button,} from 'antd'
+const renderStyle={
+    listStyle:"none",
+    width:'30%'
+}
 class TestAnimation extends React.Component {
     constructor(props) {
       super(props)
@@ -17,19 +21,29 @@ class TestAnimation extends React.Component {
             .then(res => {
                 console.log(res)
                 if(res.status==200){
-                    this.setState({arr:res.data})
+                    this.setState({arr:res.data},()=>{
+                        message.success("获取数据完成")
+                    })
                 }
             })
+    }
+    resetHandle =()=>{
+        this.setState({arr:[]},()=>{
+            message.success("重置成功")
+        })
     }
     render() {
         return (
             <div>
                 <div>测试反向代理</div>
-                <button onClick={this.handleQuery}>点击</button>
-                <ul>
+                <Button onClick={this.handleQuery} type="primary">点击</Button>
+                <Button onClick={this.resetHandle} type="ghost">重置</Button>
+                
+                <ul style={renderStyle}>
+                    <li><h1>知乎热搜</h1></li>
                 {
                     this.state.arr.map((item,index)=>{
-                        return(<li key={index}>group:<span>{item.group}</span>  linkname:<span>{item.linkname}</span>  title:<span>{item.title}</span></li>)                        
+                        return(<li key={item.uuid}>{item.query}</li>)                        
                     })
                 }
                 </ul>
