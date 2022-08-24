@@ -122,7 +122,6 @@ class TestAnimation extends React.Component {
   }
   handleQuery = () => {
     axios.get("http://localhost:8888/api/zhihu").then((res) => {
-      console.log(res);
       if (res.status == 200) {
         this.setState({ arr: res.data }, () => {
           message.success("获取数据完成");

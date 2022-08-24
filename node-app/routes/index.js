@@ -67,7 +67,6 @@ router.get('/api/data', function (req, res, next) {
 router.get('/api/zhihu', function (req, res, next) {
   // res.render('index', { title:JSON.stringify(arr) });
   axios.get("https://www.zhihu.com/api/v4/search/preset_words").then((res2) => {
-    console.log(res2.data.preset_words.words);
     res.send(JSON.stringify(res2.data.preset_words.words))
   })
 });
@@ -76,7 +75,6 @@ router.get('/api/gitselect', function (req, res, next) {
   const str =encodeURI(name);
   // https://api.github.com/search/users?q
   axios.get(`https://api.github.com/search/users?q=${str}`).then((res2) => {
-    console.log(res2.data.items);
     res.send(JSON.stringify(res2.data.items))
   })
 
