@@ -54,10 +54,10 @@ export default function Mail() {
   return (
     <>
       <Button type="primary" onClick={visible}>
-        发送邮件
+        发送邮件biu
       </Button>
       <Modal
-        title={"发送邮件 "}
+        title={"发送邮件"}
         visible={modalvisible}
         onCancel={novisible}
         onOk={sumbitHandle}
