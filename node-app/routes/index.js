@@ -54,6 +54,7 @@ var arr = [
   }
 ]
 
+let nodemailer = require('nodemailer')
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -66,16 +67,61 @@ router.get('/api/data', function (req, res, next) {
 router.get('/api/zhihu', function (req, res, next) {
   // res.render('index', { title:JSON.stringify(arr) });
   axios.get("https://www.zhihu.com/api/v4/search/preset_words").then((res2) => {
+    console.log(res2.data.preset_words.words);
     res.send(JSON.stringify(res2.data.preset_words.words))
   })
 });
 router.get('/api/gitselect', function (req, res, next) {
   const {name} = req.query
-  const str =encodeURI('name');
-  axios.get(`https://api.github.com/users/${str}`).then((res2) => {
-    res.send(JSON.stringify(res2.data))
+  const str =encodeURI(name);
+  // https://api.github.com/search/users?q
+  axios.get(`https://api.github.com/search/users?q=${str}`).then((res2) => {
+    console.log(res2.data.items);
+    res.send(JSON.stringify(res2.data.items))
   })
 
 });
+
+let transporter = nodemailer.createTransport({
+  // host: 'smtp.163.com',
+  service: "qq", //邮箱类型 例如service:'163'
+  secure: true, //是否使用安全连接，对https协议的
+  // port: 465, //qq邮件服务所占用的端口
+  auth: {
+      user: "807976684@qq.com",//开启SMTP的邮箱，发件人
+      pass: "ortaoesuajyybfgf"// qq授权码
+  }
+})
+router.get("/api/mail",(req,res,next)=>{
+  const params = req.query||req.params
+  const {user,theme,content} = params
+  if(!user||!theme||!content){
+    let obj = {
+      msg:'参数缺失'
+    }
+    res.send(JSON.stringify(obj))
+    return
+  }
+    
+  let options = {
+    from: '807976684@qq.com', //发送方
+    to: params.user,//接收方
+    subject: params.theme||"默认主题",//邮件主题
+    text: params.content,//邮件正文
+    //html:'',//html模板
+    //附件信息
+    /*attachments:[
+    {filename:'',path:'',}
+    ]*/
+  }
+  transporter.sendMail(options, (err, info) => {
+    if (err) {
+        res.send(err)
+    } else {
+        res.send(info)
+    }
+  })
+})
+
 
 module.exports = router;
