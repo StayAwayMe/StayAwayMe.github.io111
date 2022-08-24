@@ -57,7 +57,7 @@ export default function Mail() {
         发送邮件
       </Button>
       <Modal
-        title={"发送邮件"}
+        title={"发送邮件 "}
         visible={modalvisible}
         onCancel={novisible}
         onOk={sumbitHandle}
